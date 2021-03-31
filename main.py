@@ -19,12 +19,30 @@ print(f'{last_win_date_converted.month}/{last_win_date_converted.day}')
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0'}
 url = 'https://betsapi.com/t/57721/MIA-Heat'
 
-def do_stuff():
+def get_latest_game():
     src = response.content
     soup = BS(src, 'lxml')
+    tables = soup.find_all('table')
+    rows = tables[1].find_all('tr')
+    columns = rows[0].find_all('td')
+    latest_date = columns[1]['data-dt']
+    # Outcome can either be W (win), L (loss), - (postponed), or D (draw)
+    latest_outcome = columns[4].text
+    return latest_date, latest_outcome
 
+def convert(latest_date):
+    today = datetime.now().strftime("%Y-%m-%d")
+    latest_date_formatted = datetime.strptime(latest_date, '%Y-%m-%dT%H:%M:%SZ')
+    latest_date_converted = latest_date_formatted.strftime("%Y-%m-%d")
+    return latest_date_converted
+
+def compare():
+    return
+
+# Maybe check response headers too
 response = requests.get(url, headers=headers)
 if response.status_code == 200:
-    do_stuff()
+    latest_date, latest_outcome = get_latest_game()
+    latest_date_converted = convert(latest_date)
 else:
     print("No response from webpage.")
