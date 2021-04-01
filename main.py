@@ -43,6 +43,7 @@ response = requests.get(url, headers=headers)
 if response.status_code == 200:
     game_date, outcome = get_latest_game()
     todays_date_parsed, games_date_parsed = format_and_parse_dates(game_date)
-    print(compare(outcome))
+    result = compare(outcome)
+    print(result)
 else:
     print("No response from webpage.")
