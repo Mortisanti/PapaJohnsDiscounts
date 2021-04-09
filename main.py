@@ -1,10 +1,15 @@
+#TODO Automatically input valid promo code
+#TODO Implement other promo codes: HONOR25, CHOOSEBETTER
+
 import requests
+import webbrowser
 from bs4 import BeautifulSoup as BS
 from datetime import datetime
 
 # Define the headers for our request, as well as the URL we will be sending the request to
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0'}
-url = 'https://betsapi.com/t/57721/MIA-Heat'
+games_url = 'https://betsapi.com/t/57721/MIA-Heat'
+pj_url = 'https://papajohns.com/'
 
 # Parse the page's content to retrieve the last game's date and outcome and return both
 def get_latest_game():
@@ -42,20 +47,36 @@ def compare(outcome):
         if get_seconds_since_win(todays_date_parsed, games_date_parsed) < thirty_six_hours:
             result = "The Miami Heat recently won! Promo code HEATWIN is valid."
     elif outcome == 'L':
-        result = "The Miami Heat recently lost."
+        result = "The Miami Heat recently lost. Promo code HEATWIN is invalid."
     elif outcome == '-':
-        result = "The Miami Heat's latest game was postponed."
+        result = "The Miami Heat's latest game was postponed. Promo code HEATWIN is invalid."
     elif outcome == 'D':
-        result = "The Miami Heat's latest game ended in a draw."
+        result = "The Miami Heat's latest game ended in a draw. Promo code HEATWIN is invalid."
     return result
 
+def ask_to_open_webpage(outcome):
+    if outcome == 'W':
+        question = "Would you like to open the Papa John's webpage? (Y/N): "
+    else:
+        question = "Still craving Papa John's? Would you like to open the Papa John's webpage? (Y/N): "
+    while True:
+        user_input = input(question)
+        if user_input.upper() in ('Y', 'YES', 'YEAH', 'YEP', 'YEA', 'YAY', 'YARP'):
+            webbrowser.open_new_tab(pj_url)
+            break
+        elif user_input.upper() in ('N', 'NO', 'NOPE', 'NAY', 'NARP'):
+            break
+        else:
+            print("Invalid input. Try again.")
+
 # Send GET request using predetermined URL and headers
-response = requests.get(url, headers=headers)
+response = requests.get(games_url, headers=headers)
 # If the response from the page is 200 (OK), proceed; otherwise, tell the user there is no response
 if response.status_code == 200:
     game_date, outcome = get_latest_game()
     todays_date_parsed, games_date_parsed = format_and_parse_dates(game_date)
     result = compare(outcome)
     print(result)
+    ask_to_open_webpage(outcome)
 else:
     print("No response from webpage.")

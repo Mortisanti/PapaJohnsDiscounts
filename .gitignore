@@ -1,2 +1,4 @@
 /page.html
 main_tests.py
+curl_copy.py
+session.py
