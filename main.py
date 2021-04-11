@@ -46,6 +46,8 @@ def compare(outcome):
     if outcome == 'W':
         if get_seconds_since_win(todays_date_parsed, games_date_parsed) < thirty_six_hours:
             result = "The Miami Heat recently won! Promo code HEATWIN is valid."
+        else:
+            result = "The Miami Heat recently won, but not recently enough for the promo code HEATWIN to remain valid."
     elif outcome == 'L':
         result = "The Miami Heat recently lost. Promo code HEATWIN is invalid."
     elif outcome == '-':

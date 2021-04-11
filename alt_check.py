@@ -80,9 +80,13 @@ s.get(pj_url, headers=headers1)
 s.get(store_search_url, headers=headers2, params=params2)
 r = s.get(validate_url, headers=headers3, params=params3)
 result_dict = json.loads(r.text)
-promo_status = result_dict['isPromoApplied']
+print(result_dict)
 
-if promo_status == 'true':
-    print("The promo code HEATWIN is valid.")
-else:
-    print("The promo code HEATWIN is invalid.")
+try:
+    promo_status = result_dict['isPromoApplied']
+    if promo_status == 'true':
+        print("The promo code HEATWIN is valid.")
+except KeyError:
+    promo_status = result_dict['errorResult']['errorVerbiage']
+    if 'expired' in promo_status:
+        print("The promo code HEATWIN is invalid.")
