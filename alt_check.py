@@ -77,8 +77,11 @@ params3 = (
 s = requests.Session()
 
 s.get(pj_url, headers=headers1)
+# print(s.cookies.get_dict())
 s.get(store_search_url, headers=headers2, params=params2)
+# print(s.cookies.get_dict())
 r = s.get(validate_url, headers=headers3, params=params3)
+print(s.cookies.get_dict())
 result_dict = json.loads(r.text)
 print(result_dict)
 
