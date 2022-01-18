@@ -81,9 +81,9 @@ s.get(pj_url, headers=headers1)
 s.get(store_search_url, headers=headers2, params=params2)
 # print(s.cookies.get_dict())
 r = s.get(validate_url, headers=headers3, params=params3)
-print(s.cookies.get_dict())
+# print(s.cookies.get_dict())
 result_dict = json.loads(r.text)
-print(result_dict)
+# print(result_dict)
 
 try:
     promo_status = result_dict['isPromoApplied']
